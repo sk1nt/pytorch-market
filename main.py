@@ -16,6 +16,8 @@ from market_ml import (
     run_long_only_backtest,
     train_classifier,
 )
+from market_ml.data import download_binance_trades, download_binance_trades_range
+from market_ml.gexbot import load_historical_gex, stream_gex_realtime, load_gex_snapshot
 
 
 def _parse_args() -> argparse.Namespace:
@@ -45,6 +47,30 @@ def _parse_args() -> argparse.Namespace:
         default="sklearn",
         help="Choose training backend: 'sklearn' (default) or 'pytorch'",
     )
+    # Add gexbot.com integration options
+    parser.add_argument(
+        "--gex-historical",
+        action="store_true", 
+        help="Load historical GEX data from gexbot.com",
+    )
+    parser.add_argument(
+        "--gex-stream",
+        action="store_true",
+        help="Stream real-time GEX data from gexbot.com",
+    )
+    parser.add_argument(
+        "--gex-snapshot",
+        action="store_true",
+        help="Load current GEX term structure snapshot",
+    )
+    parser.add_argument(
+        "--gex-key",
+        help="Optional gexbot.com API key",
+    )
+    parser.add_argument(
+        "--gex-expiry",
+        help="Optional expiration date for GEX data (YYYY-MM-DD)",
+    )
     parser.add_argument(
         "--equity-csv",
         type=Path,
@@ -57,6 +83,52 @@ def _parse_args() -> argparse.Namespace:
         default=None,
         help="If provided, store a PNG chart of the strategy vs. buy & hold curves.",
     )
+    parser.add_argument(
+        "--download-btcusdt-trades",
+        action="store_true",
+        help="Download recent BTCUSDT trades from Binance.",
+    )
+    parser.add_argument(
+        "--download-btcusdt-trades-6mo",
+        action="store_true",
+        help="Download last 6 months of BTCUSDT trades from Binance US and save to CSV.",
+    )
+    parser.add_argument(
+        "--load-scid",
+        type=str,
+        default=None,
+        help="Path to Sierra Chart .scid file to load and print summary."
+    )
+    parser.add_argument(
+        "--stream-scid",
+        type=str,
+        default=None,
+        help="Path to Sierra Chart .scid file to stream in real time."
+    )
+    parser.add_argument(
+        "--load-sierra-trades",
+        type=str,
+        default=None,
+        help="Path to Sierra Chart trade CSV/TXT file or directory to load."
+    )
+    parser.add_argument(
+        "--load-sierra-depth",
+        type=str,
+        default=None,
+        help="Path to Sierra Chart market depth CSV/TXT file or directory to load."
+    )
+    parser.add_argument(
+        "--load-sierra-depth-bin",
+        type=str,
+        default=None,
+        help="Path to Sierra Chart .depth binary file to load."
+    )
+    parser.add_argument(
+        "--output-csv",
+        type=str,
+        default=None,
+        help="If provided, save loaded data to this CSV file."
+    )
     return parser.parse_args()
 
 
@@ -68,6 +140,63 @@ def _parse_date(date_str: Optional[str]) -> Optional[dt.date]:
 
 def main() -> None:
     args = _parse_args()
+    from market_ml.data import (
+        load_sierra_chart_scid, stream_sierra_chart_scid,
+        load_sierra_chart_trades, load_sierra_chart_depth
+    )
+
+    if args.load_scid:
+        print(f"Loading Sierra Chart .scid file: {args.load_scid}")
+        df = load_sierra_chart_scid(args.load_scid)
+        print(df.head())
+        if args.output_csv:
+            df.to_csv(args.output_csv, index=False)
+            print(f"Saved to {args.output_csv}")
+        return
+    if args.stream_scid:
+        print(f"Streaming Sierra Chart .scid file: {args.stream_scid}")
+        for rec in stream_sierra_chart_scid(args.stream_scid):
+            print(rec)
+        return
+    if args.load_sierra_trades:
+        print(f"Loading Sierra Chart trades: {args.load_sierra_trades}")
+        df = load_sierra_chart_trades(args.load_sierra_trades)
+        print(df.head())
+        if args.output_csv:
+            df.to_csv(args.output_csv, index=False)
+            print(f"Saved to {args.output_csv}")
+        return
+    if args.load_sierra_depth:
+        print(f"Loading Sierra Chart market depth: {args.load_sierra_depth}")
+        df = load_sierra_chart_depth(args.load_sierra_depth)
+        print(df.head())
+        if args.output_csv:
+            df.to_csv(args.output_csv, index=False)
+            print(f"Saved to {args.output_csv}")
+        return
+
+    # Handle gexbot.com data requests
+    if args.gex_historical:
+        print(f"Loading historical GEX data for {args.ticker}...")
+        df = load_historical_gex(args.ticker, args.start, args.end or dt.date.today().isoformat(), args.gex_key)
+        print(df.head())
+        if args.output_csv:
+            df.to_csv(args.output_csv, index=False)
+        return
+
+    if args.gex_stream:
+        print(f"Streaming real-time GEX data for {args.ticker}...")
+        for data in stream_gex_realtime([args.ticker], args.gex_key):
+            print(data)
+        return
+
+    if args.gex_snapshot:
+        print(f"Loading GEX snapshot for {args.ticker}...")
+        df = load_gex_snapshot(args.ticker, args.gex_expiry, args.gex_key)
+        print(df.head())
+        if args.output_csv:
+            df.to_csv(args.output_csv, index=False)
+        return
 
     start = _parse_date(args.start)
     end = _parse_date(args.end)
