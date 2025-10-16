@@ -1,0 +1,15 @@
+# Pinned PyTorch variants for reproducible CI and developer installs.
+#
+# CPU-only (recommended for CI):
+# Install with:
+#   python -m pip install --upgrade pip
+#   pip install torch==2.2.0 --index-url https://download.pytorch.org/whl/cpu
+torch==2.2.0
+
+# Example GPU variant (CUDA 12.1):
+# Install with:
+#   python -m pip install --upgrade pip
+#   pip install torch==2.2.0+cu121 --index-url https://download.pytorch.org/whl/cu121
+# The line below is commented so CI/installs don't accidentally pull the GPU wheel;
+# uncomment and install using the command above when you want GPU-enabled PyTorch.
+# torch==2.2.0+cu121
