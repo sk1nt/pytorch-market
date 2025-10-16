@@ -20,7 +20,21 @@ main.py                  # Command line interface that orchestrates the pipeline
 
 ## Getting started
 
-1. Install the dependencies:
+1. (Optional) Create and activate a virtual environment to keep dependencies isolated:
+
+   ```bash
+   python -m venv .venv
+   source .venv/bin/activate
+   ```
+
+   On Windows PowerShell use:
+
+   ```powershell
+   python -m venv .venv
+   .\.venv\Scripts\Activate.ps1
+   ```
+
+2. Install the dependencies:
 
    ```bash
    pip install -r requirements.txt
@@ -29,7 +43,7 @@ main.py                  # Command line interface that orchestrates the pipeline
    If you already have `pandas`, `scikit-learn` and `yfinance` available you
    can skip this step.
 
-2. Run the full pipeline:
+3. Run the full pipeline:
 
    ```bash
    python main.py --ticker SPY --start 2010-01-01 --train-ratio 0.7 \
