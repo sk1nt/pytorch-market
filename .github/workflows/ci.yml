@@ -7,12 +7,8 @@ on:
     branches: [ main ]
 
 jobs:
-  test:
+  test-cpu:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        variant: [cpu, cu121]
-
     steps:
       - uses: actions/checkout@v4
 
@@ -21,18 +17,34 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Install dependencies (PyTorch variant)
+      - name: Install dependencies (CPU)
         run: |
           python -m pip install --upgrade pip
-          if [ "${{ matrix.variant }}" = "cpu" ]; then
-            pip install -r requirements.txt
-            pip install torch==2.2.0 --index-url https://download.pytorch.org/whl/cpu
-          else
-            pip install -r requirements.txt
-            # Example CUDA variant (this may require a runner with suitable drivers)
-            pip install torch==2.2.0+cu121 --index-url https://download.pytorch.org/whl/cu121
-          fi
+          pip install -r requirements.txt
+          pip install torch==2.2.0 --index-url https://download.pytorch.org/whl/cpu
 
-      - name: Run tests
+      - name: Run tests (CPU)
+        run: |
+          pytest -q
+
+  test-cuda:
+    # This job is intended to run on self-hosted GPU runners only.
+    runs-on: [self-hosted, gpu]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies (CUDA 12.1)
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          # This installs the CUDA-enabled wheel; only run on runners with drivers
+          pip install torch==2.2.0+cu121 --index-url https://download.pytorch.org/whl/cu121
+
+      - name: Run tests (CUDA)
         run: |
           pytest -q
