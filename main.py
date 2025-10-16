@@ -40,6 +40,12 @@ def _parse_args() -> argparse.Namespace:
         help="Fraction of observations used for training (chronological split)",
     )
     parser.add_argument(
+        "--backend",
+        choices=["sklearn", "pytorch"],
+        default="sklearn",
+        help="Choose training backend: 'sklearn' (default) or 'pytorch'",
+    )
+    parser.add_argument(
         "--equity-csv",
         type=Path,
         default=None,
@@ -77,7 +83,23 @@ def main() -> None:
     X, y = build_feature_matrix(raw_data, args.ticker)
 
     print("Training model...")
-    model_result = train_classifier(X, y, train_ratio=args.train_ratio)
+    if args.backend == "pytorch":
+        try:
+            from market_ml.torch_model import train_pytorch
+
+            model_result = train_pytorch(
+                X,
+                y,
+                train_ratio=args.train_ratio,
+                epochs=20,
+            )
+        except ImportError as exc:
+            raise SystemExit(
+                "PyTorch backend requested but PyTorch is not installed. "
+                "Install torch or use the default sklearn backend."
+            ) from exc
+    else:
+        model_result = train_classifier(X, y, train_ratio=args.train_ratio)
 
     print("Classification report on the test set:\n")
     print(model_result.report)
