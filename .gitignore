@@ -6,3 +6,4 @@ btc_test_data.csv
 # Output data files
 btc_trades_6mo.csv
 output.csv
+outputs/
