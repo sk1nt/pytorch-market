@@ -11,14 +11,15 @@ def test_backtest_generates_expected_metrics():
 
     result = run_long_only_backtest(prices, signals, trading_cost=0.0)
 
-    # Ensure we get an equity curve with expected columns
-    assert set(result.equity_curve.columns) == {
+    # Ensure we get an equity curve with expected columns (allow extra columns like 'fees')
+    expected_cols = {
         "strategy_equity",
         "buy_hold_equity",
         "position",
         "strategy_returns",
         "asset_returns",
     }
+    assert expected_cols.issubset(set(result.equity_curve.columns))
 
     # CAGR should be finite and better than zero given the long bias
     assert result.metrics["cagr"] > -1

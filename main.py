@@ -18,6 +18,13 @@ from market_ml import (
 )
 from market_ml.data import download_binance_trades, download_binance_trades_range
 from market_ml.gexbot import load_historical_gex, stream_gex_realtime, load_gex_snapshot
+from market_ml.polygon import load_aggregates, stream_trades, load_options_chain
+from market_ml.strategy import (
+    PositionSizingConfig,
+    run_strategy_backtest,
+    calculate_strategy_metrics,
+)
+from market_ml.social import load_demo_tweets, aggregate_daily_sentiment
 
 
 def _parse_args() -> argparse.Namespace:
@@ -35,11 +42,82 @@ def _parse_args() -> argparse.Namespace:
         default=None,
         help="Optional end date for the download (YYYY-MM-DD)",
     )
+    # Add Polygon.io options
+    parser.add_argument(
+        "--polygon-data",
+        choices=["bars", "trades", "options"],
+        help="Load data from Polygon.io: bars (OHLCV), trades (streaming), or options chain",
+    )
+    parser.add_argument(
+        "--polygon-timespan",
+        choices=["minute", "hour", "day", "week", "month"],
+        default="day",
+        help="Timespan for Polygon.io aggregates",
+    )
+    parser.add_argument(
+        "--polygon-multiplier",
+        type=int,
+        default=1,
+        help="Multiplier for timespan (e.g. 5 for 5-minute bars)",
+    )
     parser.add_argument(
         "--train-ratio",
         type=float,
         default=0.7,
         help="Fraction of observations used for training (chronological split)",
+    )
+    # Strategy options (Part 2 features)
+    parser.add_argument(
+        "--use-strategy",
+        action="store_true",
+        help="Use advanced strategy backtest with position sizing, leverage, and fees",
+    )
+    parser.add_argument(
+        "--sizing-method",
+        choices=["constant", "compounding"],
+        default="constant",
+        help="Position sizing method for strategy backtest",
+    )
+    parser.add_argument(
+        "--leverage",
+        type=float,
+        default=1.0,
+        help="Leverage multiplier for strategy backtest",
+    )
+    parser.add_argument(
+        "--maker-fee",
+        type=float,
+        default=0.0002,
+        help="Maker fee rate (e.g., 0.0002 = 2 bps)",
+    )
+    parser.add_argument(
+        "--taker-fee",
+        type=float,
+        default=0.0005,
+        help="Taker fee rate (e.g., 0.0005 = 5 bps)",
+    )
+    parser.add_argument(
+        "--liquidation-threshold",
+        type=float,
+        default=0.0,
+        help="Liquidation threshold (0.0 disables liquidation checks)",
+    )
+    parser.add_argument(
+        "--allow-shorts",
+        action="store_true",
+        help="Enable shorting by mapping 0 predictions to -1 signals",
+    )
+    parser.add_argument(
+        "--entry-liquidity",
+        choices=["maker", "taker"],
+        default="maker",
+        help="Liquidity type for entry leg fees (maker or taker)",
+    )
+    parser.add_argument(
+        "--initial-capital",
+        type=float,
+        default=10000.0,
+        help="Initial capital for strategy backtest",
     )
     parser.add_argument(
         "--backend",
@@ -129,6 +207,24 @@ def _parse_args() -> argparse.Namespace:
         default=None,
         help="If provided, save loaded data to this CSV file."
     )
+    # Add social media options
+    parser.add_argument(
+        "--social-demo",
+        action="store_true",
+        help="Load demo social media data (tweets) for sentiment analysis",
+    )
+    parser.add_argument(
+        "--social-username",
+        type=str,
+        default="realDonaldTrump",
+        help="Twitter/X username to load tweets from (default: realDonaldTrump)",
+    )
+    parser.add_argument(
+        "--social-days",
+        type=int,
+        default=30,
+        help="Number of days of historical social data to load (default: 30)",
+    )
     return parser.parse_args()
 
 
@@ -144,6 +240,31 @@ def main() -> None:
         load_sierra_chart_scid, stream_sierra_chart_scid,
         load_sierra_chart_trades, load_sierra_chart_depth
     )
+
+    # Handle social media requests
+    if args.social_demo:
+        print(f"Loading demo tweets from @{args.social_username}...")
+        tweets = load_demo_tweets(username=args.social_username, days_back=args.social_days)
+        print(f"\nLoaded {len(tweets)} tweets")
+        print("\nSample tweets:")
+        print(tweets[["username", "text", "retweets", "likes"]].head(5))
+        
+        print("\n" + "="*80)
+        print("Aggregating daily sentiment...")
+        daily = aggregate_daily_sentiment(tweets)
+        print(daily[daily["tweet_count"] > 0])  # Only show days with tweets
+        
+        print("\n" + "="*80)
+        print("Summary statistics:")
+        print(f"Average sentiment: {daily['sentiment_score'].mean():.3f}")
+        print(f"Total engagement: {daily['engagement'].sum():,.0f}")
+        print(f"Most active day: {daily['tweet_count'].idxmax()}")
+        print(f"Highest sentiment day: {daily['sentiment_score'].idxmax()}")
+        
+        if args.output_csv:
+            daily.to_csv(args.output_csv)
+            print(f"\nSaved daily sentiment data to {args.output_csv}")
+        return
 
     if args.load_scid:
         print(f"Loading Sierra Chart .scid file: {args.load_scid}")
@@ -198,6 +319,36 @@ def main() -> None:
             df.to_csv(args.output_csv, index=False)
         return
 
+    # Handle Polygon.io data requests
+    if args.polygon_data:
+        if args.polygon_data == "bars":
+            print(f"Loading {args.polygon_timespan} bars for {args.ticker} from Polygon.io...")
+            df = load_aggregates(
+                args.ticker,
+                args.start,
+                args.end or datetime.now().strftime("%Y-%m-%d"),
+                multiplier=args.polygon_multiplier,
+                timespan=args.polygon_timespan
+            )
+            print(df.head())
+            if args.output_csv:
+                df.to_csv(args.output_csv)
+            return
+            
+        elif args.polygon_data == "trades":
+            print(f"Streaming trades for {args.ticker} from Polygon.io...")
+            for trade in stream_trades(args.ticker):
+                print(trade)
+            return
+            
+        elif args.polygon_data == "options":
+            print(f"Loading options chain for {args.ticker} from Polygon.io...")
+            df = load_options_chain(args.ticker)
+            print(df.head())
+            if args.output_csv:
+                df.to_csv(args.output_csv)
+            return
+
     start = _parse_date(args.start)
     end = _parse_date(args.end)
 
@@ -235,19 +386,64 @@ def main() -> None:
 
     test_prices = raw_data["Adj Close"][args.ticker].loc[model_result.test_predictions.index]
 
-    print("Running backtest...")
-    backtest = run_long_only_backtest(test_prices, model_result.test_predictions)
+    if args.use_strategy:
+        print("Running advanced strategy backtest...")
+        # Map predictions (0/1) to signals (0/1); shorting not enabled by default
+        signals = model_result.test_predictions.astype(int)
+        if args.allow_shorts:
+            # Map 0 predictions to -1 to allow shorting
+            signals = signals.replace(0, -1)
+        cfg = PositionSizingConfig(
+            initial_capital=args.initial_capital,
+            sizing_method=args.sizing_method,
+            leverage=args.leverage,
+            maker_fee=args.maker_fee,
+            taker_fee=args.taker_fee,
+            liquidation_threshold=args.liquidation_threshold,
+            entry_liquidity=args.entry_liquidity,
+        )
+        results = run_strategy_backtest(test_prices, signals, cfg)
+        metrics = calculate_strategy_metrics(results)
+        print("Strategy metrics:")
+        print(pd.Series(metrics).to_string(float_format="{:.4f}".format))
 
-    metrics = pd.Series(backtest.metrics)
-    print("Backtest metrics:")
-    print(metrics.to_string(float_format="{:.2%}".format))
+        if args.equity_csv:
+            args.equity_csv.parent.mkdir(parents=True, exist_ok=True)
+            results.to_csv(args.equity_csv, index=True)
+            print(f"Saved strategy trade log to {args.equity_csv}.")
+        # Optional plotting for strategy results
+        if args.plot_path:
+            try:
+                import matplotlib.pyplot as plt
+            except ImportError:
+                print("matplotlib is not installed; skipping plot generation.")
+            else:
+                fig, ax = plt.subplots(figsize=(10, 6))
+                results['equity'].plot(ax=ax, label='Strategy Equity')
+                ax.set_title(f"{args.ticker} Strategy Equity ({args.sizing_method}, lev={args.leverage})")
+                ax.set_ylabel("Equity")
+                ax.legend()
+                ax.grid(True, alpha=0.3)
+                fig.tight_layout()
+                args.plot_path.parent.mkdir(parents=True, exist_ok=True)
+                fig.savefig(args.plot_path)
+                plt.close(fig)
+                print(f"Saved strategy equity plot to {args.plot_path}.")
+    else:
+        print("Running backtest...")
+        backtest = run_long_only_backtest(test_prices, model_result.test_predictions)
 
-    if args.equity_csv:
-        args.equity_csv.parent.mkdir(parents=True, exist_ok=True)
-        backtest.equity_curve.to_csv(args.equity_csv, index=True)
-        print(f"Saved equity curve to {args.equity_csv}.")
+        metrics = pd.Series(backtest.metrics)
+        print("Backtest metrics:")
+        print(metrics.to_string(float_format="{:.2%}".format))
 
-    if args.plot_path:
+        if args.equity_csv:
+            args.equity_csv.parent.mkdir(parents=True, exist_ok=True)
+            backtest.equity_curve.to_csv(args.equity_csv, index=True)
+            print(f"Saved equity curve to {args.equity_csv}.")
+
+    # Only plot legacy backtest comparison here; strategy plotting is handled in the strategy branch above
+    if args.plot_path and not args.use_strategy:
         try:
             import matplotlib.pyplot as plt
         except ImportError:  # pragma: no cover - plotting optional
