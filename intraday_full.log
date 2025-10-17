@@ -1,0 +1,245 @@
+nohup: ignoring input
+Failed to load historical GEX data: API request failed: HTTPSConnectionPool(host='api.gexbot.com', port=443): Max retries exceeded with url: /VIX/classic/full?key=mW0CQI9onfOX (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7a74756920d0>: Failed to resolve 'api.gexbot.com' ([Errno -3] Temporary failure in name resolution)"))
+Failed to load historical GEX data: API request failed [503] for https://api.gexbot.com/VIX/classic/full: 503 Server Error: Service Unavailable for url: https://api.gexbot.com/VIX/classic/full?key=mW0CQI9onfOX
+Body: <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN""http://www.w3.org/TR/html4/strict.dtd">
+<HTML><HEAD><TITLE>Service Unavailable</TITLE>
+<META HTTP-EQUIV="Content-Type" Content="text/html; charset=us-ascii"></HEAD>
+<BODY><h2>Service Unavailable</h2>
+<hr><p>HTTP Error 503. The service is unavailable.</p>
+</BODY></HTML>
+
+Failed to load historical GEX data: API request failed: HTTPSConnectionPool(host='api.gexbot.com', port=443): Max retries exceeded with url: /VIX/classic/full?key=mW0CQI9onfOX (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7a7475692490>: Failed to resolve 'api.gexbot.com' ([Errno -3] Temporary failure in name resolution)"))
+Failed to load historical GEX data: API request failed: HTTPSConnectionPool(host='api.gexbot.com', port=443): Max retries exceeded with url: /ES_SPX/classic/full?key=mW0CQI9onfOX (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7a7475693ed0>: Failed to resolve 'api.gexbot.com' ([Errno -3] Temporary failure in name resolution)"))
+Failed to load historical GEX data: API request failed: HTTPSConnectionPool(host='api.gexbot.com', port=443): Max retries exceeded with url: /NQ_NDX/classic/full?key=mW0CQI9onfOX (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7a74750f8050>: Failed to resolve 'api.gexbot.com' ([Errno -3] Temporary failure in name resolution)"))
+Failed to load historical GEX data: API request failed: HTTPSConnectionPool(host='api.gexbot.com', port=443): Max retries exceeded with url: /SPY/classic/full?key=mW0CQI9onfOX (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7a74750f8550>: Failed to resolve 'api.gexbot.com' ([Errno -3] Temporary failure in name resolution)"))
+Failed to load historical GEX data: API request failed: HTTPSConnectionPool(host='api.gexbot.com', port=443): Max retries exceeded with url: /QQQ/classic/full?key=mW0CQI9onfOX (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7a74750f8a50>: Failed to resolve 'api.gexbot.com' ([Errno -3] Temporary failure in name resolution)"))
+Failed to load historical GEX data: API request failed: HTTPSConnectionPool(host='api.gexbot.com', port=443): Max retries exceeded with url: /AAPL/classic/full?key=mW0CQI9onfOX (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7a74750f8f50>: Failed to resolve 'api.gexbot.com' ([Errno -3] Temporary failure in name resolution)"))
+Failed to load historical GEX data: API request failed: HTTPSConnectionPool(host='api.gexbot.com', port=443): Max retries exceeded with url: /VIX/classic/full?key=mW0CQI9onfOX (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7a74750f9450>: Failed to resolve 'api.gexbot.com' ([Errno -3] Temporary failure in name resolution)"))
+✅ API key validated: API key valid (classic/zero accessible)
+
+Starting market-hours GEX backfill for 6 symbols
+Market hours: 8:30 AM - 6:00 PM EST (Monday-Friday)
+Polling interval: 60s (every minute)
+Aggregation: full
+Samples per day: ~570
+Running indefinitely during market hours
+Output: outputs/intraday
+
+Press Ctrl+C to stop and save current data
+
+
+[2025-10-17 05:27:03 EDT] Outside market hours
+Waiting 3.0 hours until market opens...
+Next market open: 2025-10-17 08:30:00 EDT
+[2025-10-17 14:39:18 EDT] Sample 1
+  VIX: Error - Historical data load failed: API request failed: HTTPSConnectionPool(host='api.gexbot.com', port=443): Max retries exceeded with url: /VIX/classic/full?key=mW0CQI9onfOX (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7a74756920d0>: Failed to resolve 'api.gexbot.com' ([Errno -3] Temporary failure in name resolution)"))
+  ES_SPX: price=$6705.88, zero_gamma=$6672.82, sum_gex=12767.89511
+  NQ_NDX: price=$24999.52, zero_gamma=$24897.75, sum_gex=2595.62098
+  SPY: price=$664.53, zero_gamma=$662.5, sum_gex=1004.74455
+  QQQ: price=$604.27, zero_gamma=$604.78, sum_gex=214.51718
+  AAPL: price=$251.84, zero_gamma=$247.63, sum_gex=1476.80321
+[2025-10-17 14:40:54 EDT] Sample 2
+  VIX: price=$22.37, zero_gamma=$21.53, sum_gex=77.83493
+  ES_SPX: price=$6706.05, zero_gamma=$6672.57, sum_gex=13561.43232
+  NQ_NDX: price=$25000.37, zero_gamma=$24897.75, sum_gex=2513.33038
+  SPY: price=$664.61, zero_gamma=$662.5, sum_gex=787.85182
+  QQQ: price=$604.36, zero_gamma=$604.78, sum_gex=368.89277
+  AAPL: price=$251.87, zero_gamma=$247.75, sum_gex=1438.41813
+[2025-10-17 14:41:56 EDT] Sample 3
+  VIX: price=$22.44, zero_gamma=$21.53, sum_gex=78.22493
+  ES_SPX: price=$6702.29, zero_gamma=$6673.59, sum_gex=7554.187
+  NQ_NDX: price=$24982.75, zero_gamma=$24897.75, sum_gex=2437.42163
+  SPY: price=$664.18, zero_gamma=$662.5, sum_gex=-22.72898
+  QQQ: price=$603.89, zero_gamma=$604.78, sum_gex=117.64412
+  AAPL: price=$251.8, zero_gamma=$247.63, sum_gex=1466.59606
+[2025-10-17 14:42:59 EDT] Sample 4
+  VIX: price=$22.46, zero_gamma=$21.53, sum_gex=78.53281
+  ES_SPX: price=$6703.67, zero_gamma=$6672.57, sum_gex=8286.93092
+  NQ_NDX: price=$24988.33, zero_gamma=$24895.97, sum_gex=2302.38504
+  SPY: price=$664.38, zero_gamma=$662.5, sum_gex=384.22556
+  QQQ: price=$604.15, zero_gamma=$604.78, sum_gex=372.28573
+  AAPL: price=$251.93, zero_gamma=$247.63, sum_gex=1446.22004
+[2025-10-17 14:44:01 EDT] Sample 5
+  VIX: price=$22.48, zero_gamma=$21.53, sum_gex=78.90744
+  ES_SPX: price=$6702.86, zero_gamma=$6673.91, sum_gex=8233.37308
+  NQ_NDX: price=$24986.6, zero_gamma=$24895.97, sum_gex=2315.82098
+  SPY: price=$664.21, zero_gamma=$662.5, sum_gex=436.09235
+  QQQ: price=$603.97, zero_gamma=$604.78, sum_gex=245.14097
+  AAPL: price=$251.8, zero_gamma=$247.54, sum_gex=1442.31766
+[2025-10-17 14:45:02 EDT] Sample 6
+  VIX: price=$22.49, zero_gamma=$21.53, sum_gex=79.29516
+  ES_SPX: price=$6703.13, zero_gamma=$6674.28, sum_gex=8190.59867
+  NQ_NDX: price=$24984.59, zero_gamma=$24908.68, sum_gex=2317.84419
+  SPY: price=$664.34, zero_gamma=$662.5, sum_gex=499.35796
+  QQQ: price=$604.05, zero_gamma=$604.78, sum_gex=266.70044
+  AAPL: price=$251.78, zero_gamma=$247.54, sum_gex=1453.22551
+[2025-10-17 14:46:04 EDT] Sample 7
+  VIX: price=$22.4, zero_gamma=$22.42, sum_gex=78.62125
+  ES_SPX: price=$6705.79, zero_gamma=$6671.88, sum_gex=11853.515
+  NQ_NDX: price=$24994.92, zero_gamma=$24908.68, sum_gex=2322.8683
+  SPY: price=$664.66, zero_gamma=$662.5, sum_gex=870.22656
+  QQQ: price=$604.35, zero_gamma=$604.78, sum_gex=331.46407
+  AAPL: price=$251.82, zero_gamma=$247.63, sum_gex=1478.8496
+[2025-10-17 14:47:11 EDT] Sample 8
+  VIX: price=$22.32, zero_gamma=$22.42, sum_gex=77.03961
+  ES_SPX: price=$6705.17, zero_gamma=$6672.82, sum_gex=13308.77346
+  NQ_NDX: price=$24994.13, zero_gamma=$24908.68, sum_gex=2350.12082
+  SPY: price=$664.44, zero_gamma=$662.5, sum_gex=382.32288
+  QQQ: price=$604.11, zero_gamma=$604.78, sum_gex=291.52507
+  AAPL: price=$251.79, zero_gamma=$247.54, sum_gex=1491.55856
+[2025-10-17 14:48:15 EDT] Sample 9
+  VIX: price=$22.42, zero_gamma=$22.42, sum_gex=78.27625
+  ES_SPX: price=$6701.91, zero_gamma=$6673.59, sum_gex=6748.58314
+  NQ_NDX: price=$24977.26, zero_gamma=$24895.97, sum_gex=2297.62525
+  SPY: price=$664.14, zero_gamma=$662.5, sum_gex=315.58226
+  QQQ: price=$603.74, zero_gamma=$604.78, sum_gex=365.8952
+  AAPL: price=$251.8, zero_gamma=$247.75, sum_gex=1447.00496
+[2025-10-17 14:49:17 EDT] Sample 10
+  VIX: price=$22.37, zero_gamma=$22.42, sum_gex=78.30439
+  ES_SPX: price=$6703.28, zero_gamma=$6672.25, sum_gex=7768.57189
+  NQ_NDX: price=$24983.27, zero_gamma=$24895.97, sum_gex=2261.32278
+  SPY: price=$664.37, zero_gamma=$662.5, sum_gex=360.29759
+  QQQ: price=$603.99, zero_gamma=$604.78, sum_gex=251.3531
+  AAPL: price=$251.91, zero_gamma=$247.63, sum_gex=1443.44426
+[2025-10-17 14:50:20 EDT] Sample 11
+  VIX: Error - Historical data load failed: API request failed [503] for https://api.gexbot.com/VIX/classic/full: 503 Server Error: Service Unavailable for url: https://api.gexbot.com/VIX/classic/full?key=mW0CQI9onfOX
+Body: <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN""http://www.w3.org/TR/html4/strict.dtd">
+<HTML><HEAD><TITLE>Service Unavailable</TITLE>
+<META HTTP-EQUIV="Content-Type" Content="text/html; charset=us-ascii"></HEAD>
+<BODY><h2>Service Unavailable</h2>
+<hr><p>HTTP Error 503. The service is unavailable.</p>
+</BODY></HTML>
+
+  ES_SPX: price=$6705.22, zero_gamma=$6672.25, sum_gex=12242.7124
+  NQ_NDX: price=$24990.07, zero_gamma=$24908.68, sum_gex=2248.74065
+  SPY: price=$664.56, zero_gamma=$662.5, sum_gex=686.52566
+  QQQ: price=$604.18, zero_gamma=$604.78, sum_gex=385.46766
+  AAPL: price=$252.16, zero_gamma=$247.63, sum_gex=1412.73301
+[2025-10-17 14:51:23 EDT] Sample 12
+  VIX: Error - Historical data load failed: API request failed: HTTPSConnectionPool(host='api.gexbot.com', port=443): Max retries exceeded with url: /VIX/classic/full?key=mW0CQI9onfOX (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7a7475692490>: Failed to resolve 'api.gexbot.com' ([Errno -3] Temporary failure in name resolution)"))
+  ES_SPX: Error - Historical data load failed: API request failed: HTTPSConnectionPool(host='api.gexbot.com', port=443): Max retries exceeded with url: /ES_SPX/classic/full?key=mW0CQI9onfOX (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7a7475693ed0>: Failed to resolve 'api.gexbot.com' ([Errno -3] Temporary failure in name resolution)"))
+  NQ_NDX: Error - Historical data load failed: API request failed: HTTPSConnectionPool(host='api.gexbot.com', port=443): Max retries exceeded with url: /NQ_NDX/classic/full?key=mW0CQI9onfOX (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7a74750f8050>: Failed to resolve 'api.gexbot.com' ([Errno -3] Temporary failure in name resolution)"))
+  SPY: Error - Historical data load failed: API request failed: HTTPSConnectionPool(host='api.gexbot.com', port=443): Max retries exceeded with url: /SPY/classic/full?key=mW0CQI9onfOX (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7a74750f8550>: Failed to resolve 'api.gexbot.com' ([Errno -3] Temporary failure in name resolution)"))
+  QQQ: Error - Historical data load failed: API request failed: HTTPSConnectionPool(host='api.gexbot.com', port=443): Max retries exceeded with url: /QQQ/classic/full?key=mW0CQI9onfOX (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7a74750f8a50>: Failed to resolve 'api.gexbot.com' ([Errno -3] Temporary failure in name resolution)"))
+  AAPL: Error - Historical data load failed: API request failed: HTTPSConnectionPool(host='api.gexbot.com', port=443): Max retries exceeded with url: /AAPL/classic/full?key=mW0CQI9onfOX (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7a74750f8f50>: Failed to resolve 'api.gexbot.com' ([Errno -3] Temporary failure in name resolution)"))
+[2025-10-17 14:54:23 EDT] Sample 13
+  VIX: Error - Historical data load failed: API request failed: HTTPSConnectionPool(host='api.gexbot.com', port=443): Max retries exceeded with url: /VIX/classic/full?key=mW0CQI9onfOX (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7a74750f9450>: Failed to resolve 'api.gexbot.com' ([Errno -3] Temporary failure in name resolution)"))Failed to load historical GEX data: API request failed: HTTPSConnectionPool(host='api.gexbot.com', port=443): Max retries exceeded with url: /ES_SPX/classic/full?key=mW0CQI9onfOX (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7a74750f9950>: Failed to resolve 'api.gexbot.com' ([Errno -3] Temporary failure in name resolution)"))
+Failed to load historical GEX data: API request failed: HTTPSConnectionPool(host='api.gexbot.com', port=443): Max retries exceeded with url: /NQ_NDX/classic/full?key=mW0CQI9onfOX (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7a74750f9e50>: Failed to resolve 'api.gexbot.com' ([Errno -3] Temporary failure in name resolution)"))
+Failed to load historical GEX data: API request failed: HTTPSConnectionPool(host='api.gexbot.com', port=443): Max retries exceeded with url: /SPY/classic/full?key=mW0CQI9onfOX (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7a74750fa350>: Failed to resolve 'api.gexbot.com' ([Errno -3] Temporary failure in name resolution)"))
+Failed to load historical GEX data: API request failed: HTTPSConnectionPool(host='api.gexbot.com', port=443): Max retries exceeded with url: /QQQ/classic/full?key=mW0CQI9onfOX (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7a74750fa850>: Failed to resolve 'api.gexbot.com' ([Errno -3] Temporary failure in name resolution)"))
+Failed to load historical GEX data: API request failed: HTTPSConnectionPool(host='api.gexbot.com', port=443): Max retries exceeded with url: /AAPL/classic/full?key=mW0CQI9onfOX (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7a7475692fd0>: Failed to resolve 'api.gexbot.com' ([Errno -3] Temporary failure in name resolution)"))
+
+  ES_SPX: Error - Historical data load failed: API request failed: HTTPSConnectionPool(host='api.gexbot.com', port=443): Max retries exceeded with url: /ES_SPX/classic/full?key=mW0CQI9onfOX (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7a74750f9950>: Failed to resolve 'api.gexbot.com' ([Errno -3] Temporary failure in name resolution)"))
+  NQ_NDX: Error - Historical data load failed: API request failed: HTTPSConnectionPool(host='api.gexbot.com', port=443): Max retries exceeded with url: /NQ_NDX/classic/full?key=mW0CQI9onfOX (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7a74750f9e50>: Failed to resolve 'api.gexbot.com' ([Errno -3] Temporary failure in name resolution)"))
+  SPY: Error - Historical data load failed: API request failed: HTTPSConnectionPool(host='api.gexbot.com', port=443): Max retries exceeded with url: /SPY/classic/full?key=mW0CQI9onfOX (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7a74750fa350>: Failed to resolve 'api.gexbot.com' ([Errno -3] Temporary failure in name resolution)"))
+  QQQ: Error - Historical data load failed: API request failed: HTTPSConnectionPool(host='api.gexbot.com', port=443): Max retries exceeded with url: /QQQ/classic/full?key=mW0CQI9onfOX (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7a74750fa850>: Failed to resolve 'api.gexbot.com' ([Errno -3] Temporary failure in name resolution)"))
+  AAPL: Error - Historical data load failed: API request failed: HTTPSConnectionPool(host='api.gexbot.com', port=443): Max retries exceeded with url: /AAPL/classic/full?key=mW0CQI9onfOX (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7a7475692fd0>: Failed to resolve 'api.gexbot.com' ([Errno -3] Temporary failure in name resolution)"))
+[2025-10-17 14:57:22 EDT] Sample 14
+  VIX: price=$22.21, zero_gamma=$21.47, sum_gex=75.29266
+  ES_SPX: price=$6703.93, zero_gamma=$6673.0, sum_gex=7961.82532
+  NQ_NDX: price=$24986.64, zero_gamma=$24908.68, sum_gex=2256.11655
+  SPY: price=$664.39, zero_gamma=$662.5, sum_gex=534.42914
+  QQQ: price=$604.08, zero_gamma=$604.78, sum_gex=585.77434
+  AAPL: price=$252.08, zero_gamma=$247.75, sum_gex=1474.60905
+[2025-10-17 14:58:24 EDT] Sample 15
+  VIX: price=$22.13, zero_gamma=$21.47, sum_gex=73.77253
+  ES_SPX: price=$6704.74, zero_gamma=$6672.82, sum_gex=8081.21447
+  NQ_NDX: price=$24991.31, zero_gamma=$24908.68, sum_gex=2235.79518
+  SPY: price=$664.47, zero_gamma=$662.5, sum_gex=741.44571
+  QQQ: price=$604.19, zero_gamma=$604.78, sum_gex=523.92398
+  AAPL: price=$252.08, zero_gamma=$247.63, sum_gex=1478.33543
+[2025-10-17 14:59:26 EDT] Sample 16
+  VIX: price=$22.15, zero_gamma=$21.47, sum_gex=73.39734
+  ES_SPX: price=$6704.34, zero_gamma=$6678.91, sum_gex=8059.31216
+  NQ_NDX: price=$24993.18, zero_gamma=$24908.68, sum_gex=2283.13781
+  SPY: price=$664.46, zero_gamma=$662.5, sum_gex=720.834
+  QQQ: price=$604.21, zero_gamma=$604.78, sum_gex=500.50315
+  AAPL: price=$252.29, zero_gamma=$247.75, sum_gex=1488.80273
+[2025-10-17 15:00:28 EDT] Sample 17
+  VIX: price=$22.05, zero_gamma=$21.47, sum_gex=71.08593
+  ES_SPX: price=$6706.94, zero_gamma=$6672.25, sum_gex=13336.12514
+  NQ_NDX: price=$25002.19, zero_gamma=$24908.68, sum_gex=2323.63775
+  SPY: price=$664.71, zero_gamma=$662.5, sum_gex=273.87474
+  QQQ: price=$604.45, zero_gamma=$604.78, sum_gex=641.47207
+  AAPL: price=$252.44, zero_gamma=$247.75, sum_gex=1526.10999
+[2025-10-17 15:01:30 EDT] Sample 18
+  VIX: price=$22.07, zero_gamma=$21.53, sum_gex=70.86426
+  ES_SPX: price=$6706.29, zero_gamma=$6674.28, sum_gex=13032.39267
+  NQ_NDX: price=$25000.45, zero_gamma=$24886.19, sum_gex=2410.17226
+  SPY: price=$664.66, zero_gamma=$662.5, sum_gex=1210.75448
+  QQQ: price=$604.38, zero_gamma=$604.78, sum_gex=679.7164
+  AAPL: price=$252.36, zero_gamma=$247.63, sum_gex=1533.37346
+[2025-10-17 15:02:32 EDT] Sample 19
+  VIX: price=$22.03, zero_gamma=$22.42, sum_gex=70.23916
+  ES_SPX: price=$6708.18, zero_gamma=$6673.91, sum_gex=13857.00676
+  NQ_NDX: price=$25009.98, zero_gamma=$24907.78, sum_gex=2556.62232
+  SPY: price=$664.86, zero_gamma=$662.5, sum_gex=1414.92018
+  QQQ: price=$604.64, zero_gamma=$604.78, sum_gex=308.42274
+  AAPL: price=$252.44, zero_gamma=$247.63, sum_gex=1489.51508
+[2025-10-17 15:03:34 EDT] Sample 20
+  VIX: price=$22.05, zero_gamma=$22.42, sum_gex=70.65648
+  ES_SPX: price=$6706.03, zero_gamma=$6683.34, sum_gex=12385.02004
+  NQ_NDX: price=$25002.71, zero_gamma=$24886.19, sum_gex=2647.54171
+  SPY: price=$664.55, zero_gamma=$662.5, sum_gex=1019.08379
+  QQQ: price=$604.38, zero_gamma=$604.78, sum_gex=653.7916
+  AAPL: price=$252.37, zero_gamma=$250.13, sum_gex=1352.32797
+[2025-10-17 15:04:36 EDT] Sample 21
+  VIX: price=$22.0, zero_gamma=$22.42, sum_gex=70.51929
+  ES_SPX: price=$6707.7, zero_gamma=$6672.25, sum_gex=13168.87633
+  NQ_NDX: price=$25009.6, zero_gamma=$24886.19, sum_gex=2548.33019
+  SPY: price=$664.79, zero_gamma=$662.5, sum_gex=1337.40575
+  QQQ: price=$604.66, zero_gamma=$604.78, sum_gex=538.68439
+  AAPL: price=$252.38, zero_gamma=$247.75, sum_gex=1463.53767
+[2025-10-17 15:05:38 EDT] Sample 22
+  VIX: price=$21.95, zero_gamma=$21.53, sum_gex=69.53124
+  ES_SPX: price=$6708.6, zero_gamma=$6672.25, sum_gex=14744.36294
+  NQ_NDX: price=$25013.14, zero_gamma=$24866.88, sum_gex=2572.33486
+  SPY: price=$664.84, zero_gamma=$662.5, sum_gex=1150.38494
+  QQQ: price=$604.73, zero_gamma=$604.78, sum_gex=512.91055
+  AAPL: price=$252.49, zero_gamma=$247.63, sum_gex=1465.60154
+[2025-10-17 15:06:39 EDT] Sample 23
+  VIX: price=$21.94, zero_gamma=$21.53, sum_gex=69.44316
+  ES_SPX: price=$6707.06, zero_gamma=$6675.13, sum_gex=13477.01531
+  NQ_NDX: price=$25006.66, zero_gamma=$24907.78, sum_gex=2647.796
+  SPY: price=$664.66, zero_gamma=$662.5, sum_gex=1642.47584
+  QQQ: price=$604.52, zero_gamma=$604.78, sum_gex=503.47047
+  AAPL: price=$252.38, zero_gamma=$247.63, sum_gex=1541.64
+[2025-10-17 15:07:41 EDT] Sample 24
+  VIX: price=$21.97, zero_gamma=$21.53, sum_gex=67.98404
+  ES_SPX: price=$6707.21, zero_gamma=$6675.58, sum_gex=14145.66748
+  NQ_NDX: price=$25006.81, zero_gamma=$24907.78, sum_gex=2660.2471
+  SPY: price=$664.68, zero_gamma=$662.5, sum_gex=1218.33174
+  QQQ: price=$604.52, zero_gamma=$604.78, sum_gex=410.3027
+  AAPL: price=$252.43, zero_gamma=$247.75, sum_gex=1506.64125
+[2025-10-17 15:08:44 EDT] Sample 25
+  VIX: price=$22.02, zero_gamma=$22.42, sum_gex=68.60248
+  ES_SPX: price=$6705.41, zero_gamma=$6673.59, sum_gex=12487.48992
+  NQ_NDX: price=$25002.29, zero_gamma=$24907.78, sum_gex=2625.90845
+  SPY: price=$664.49, zero_gamma=$662.5, sum_gex=1108.47266
+  QQQ: price=$604.35, zero_gamma=$604.78, sum_gex=328.11341
+  AAPL: price=$252.19, zero_gamma=$247.75, sum_gex=1475.04243
+[2025-10-17 15:09:52 EDT] Sample 26
+  VIX: price=$21.89, zero_gamma=$21.53, sum_gex=66.32926
+  ES_SPX: price=$6708.51, zero_gamma=$6672.25, sum_gex=14120.68615
+  NQ_NDX: price=$25015.84, zero_gamma=$24886.19, sum_gex=2646.27831
+  SPY: price=$664.9, zero_gamma=$662.5, sum_gex=1297.95638
+  QQQ: price=$604.82, zero_gamma=$604.78, sum_gex=572.00762
+  AAPL: price=$252.34, zero_gamma=$247.63, sum_gex=1570.22272
+[2025-10-17 15:10:59 EDT] Sample 27
+  VIX: price=$21.87, zero_gamma=$21.53, sum_gex=65.27311
+  ES_SPX: price=$6708.75, zero_gamma=$6674.69, sum_gex=14704.02816
+  NQ_NDX: price=$25016.65, zero_gamma=$24897.75, sum_gex=2699.32436
+  SPY: price=$664.88, zero_gamma=$662.5, sum_gex=1438.71214
+  QQQ: price=$604.8, zero_gamma=$604.78, sum_gex=613.45024
+  AAPL: price=$252.33, zero_gamma=$247.63, sum_gex=1533.74572
+[2025-10-17 15:12:00 EDT] Sample 28
+  VIX: price=$21.69, zero_gamma=$21.53, sum_gex=62.9188
+  ES_SPX: price=$6714.17, zero_gamma=$6671.88, sum_gex=18895.41579
+  NQ_NDX: price=$25041.3, zero_gamma=$24898.65, sum_gex=2933.81116
+  SPY: price=$665.48, zero_gamma=$662.5, sum_gex=1775.41215
+  QQQ: price=$605.45, zero_gamma=$604.78, sum_gex=691.25802
+  AAPL: price=$252.56, zero_gamma=$247.63, sum_gex=1552.76921
+[2025-10-17 15:13:02 EDT] Sample 29
+  VIX: price=$21.71, zero_gamma=$21.53, sum_gex=62.56411
+  ES_SPX: price=$6713.62, zero_gamma=$6676.03, sum_gex=17286.90419
+  NQ_NDX: price=$25039.0, zero_gamma=$24906.88, sum_gex=2937.27219

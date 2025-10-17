@@ -1,3 +1,53 @@
+# Using Social Sentiment as ML Features
+
+You can include daily social sentiment features in your ML model to improve predictions.
+
+## Python Example
+
+```python
+from market_ml.data import download_price_history
+from market_ml.social import load_demo_tweets, aggregate_daily_sentiment
+from market_ml.features import build_feature_matrix
+
+# Download price data
+data = download_price_history(...)
+
+# Load and aggregate sentiment data
+tweets = load_demo_tweets(username="realDonaldTrump", days_back=90)
+sentiment = aggregate_daily_sentiment(tweets)
+
+# Align sentiment index to match price data (if needed)
+sentiment = sentiment.reindex(data.index, method='ffill')
+
+# Build feature matrix with sentiment features
+X, y = build_feature_matrix(data, "SPY", extra_features=sentiment)
+
+# Now X includes all sentiment columns as features for ML training
+print(X.columns)
+```
+
+## CLI Integration
+
+To use sentiment features from the command line, add a flag (e.g., `--use-sentiment`) and wire the pipeline to join daily sentiment features before training:
+
+```bash
+python main.py --ticker SPY --start 2015-01-01 --use-sentiment --social-username realDonaldTrump --social-days 90
+```
+
+In `main.py`, join the sentiment DataFrame to your price data and pass it to `build_feature_matrix`:
+
+```python
+if args.use_sentiment:
+   from market_ml.social import load_demo_tweets, aggregate_daily_sentiment
+   tweets = load_demo_tweets(username=args.social_username, days_back=args.social_days)
+   sentiment = aggregate_daily_sentiment(tweets)
+   sentiment = sentiment.reindex(raw_data.index, method='ffill')
+   X, y = build_feature_matrix(raw_data, args.ticker, extra_features=sentiment)
+else:
+   X, y = build_feature_matrix(raw_data, args.ticker)
+```
+
+All columns from the daily sentiment DataFrame (e.g., `sentiment_score`, `volume_weighted_sentiment`, `engagement`, etc.) will be included as features.
 # Polygon.io and gexbot.com Usage Examples
 
 This project supports advanced market data and options analytics via Polygon.io and GEX (gamma exposure) analytics via gexbot.com.

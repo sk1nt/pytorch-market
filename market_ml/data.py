@@ -52,15 +52,15 @@ def stream_sierra_chart_scid(path: str, poll_interval: float = 0.5, start_record
                         break
                     dt, o, h, l, c, ntrades, tvol, bvol, avol = struct.unpack('<Q4f4I', rec_bytes)
                     try:
-                        # Print raw timestamp value and try ns first
-                        ts = pd.to_datetime(dt, unit='ns')
-                        if ts.year < 2000 or ts.year > 2100:
-                            # Try microseconds
-                            ts = pd.to_datetime(dt, unit='us')
-                            if ts.year < 2000 or ts.year > 2100:
-                                # Try milliseconds
-                                ts = pd.to_datetime(dt, unit='ms')
-                        print(f"Raw timestamp: {dt}, Converted: {ts}")
+                        # Sierra Chart stores timestamps as 64-bit integers representing
+                        # microseconds since 1899-12-30 00:00:00 UTC
+                        base_date = pd.Timestamp('1899-12-30 00:00:00')
+                        ts = base_date + pd.Timedelta(microseconds=dt)
+                        
+                        # Validate timestamp is reasonable
+                        if ts.year < 1990 or ts.year > 2100:
+                            continue
+                            
                         yield {
                             'timestamp': ts,
                             'price': c,
@@ -69,7 +69,7 @@ def stream_sierra_chart_scid(path: str, poll_interval: float = 0.5, start_record
                             'bid_volume': bvol,
                             'ask_volume': avol
                         }
-                    except Exception:
+                    except Exception as e:
                         continue
             last_record = num_records
         time.sleep(poll_interval)
@@ -104,43 +104,30 @@ def load_sierra_chart_scid(path: str, start_record: int = 0, max_records: int = 
             num_to_read = min(max_records, num_records - start_record)
         else:
             num_to_read = num_records - start_record
-        # Diagnostics: print first 20 raw timestamps
-        raw_timestamps = []
-        f.seek(HEADER_SIZE + start_record * RECORD_SIZE)
-        for i in range(min(20, num_to_read)):
-            rec_bytes = f.read(RECORD_SIZE)
-            if len(rec_bytes) < RECORD_SIZE:
-                break
-            dt, *_ = struct.unpack('<Q4f4I', rec_bytes)
-            raw_timestamps.append(dt)
-        print(f"First {len(raw_timestamps)} raw timestamps: {raw_timestamps}")
-        # Reset file pointer for main loop
+        # Parse records
         f.seek(HEADER_SIZE + start_record * RECORD_SIZE)
         for _ in range(num_to_read):
             rec_bytes = f.read(RECORD_SIZE)
             if len(rec_bytes) < RECORD_SIZE:
                 break
             dt, o, h, l, c, ntrades, tvol, bvol, avol = struct.unpack('<Q4f4I', rec_bytes)
-            # Try microsecond timestamp first, fallback to ms and ns
-            ts = None
+            
+            # Sierra Chart stores timestamps as 64-bit integers representing 
+            # microseconds since 1899-12-30 00:00:00 UTC
             try:
-                ts = pd.to_datetime(dt, unit='us')
-                if ts.year < 2000 or ts.year > 2100:
-                    raise ValueError('Out of bounds us timestamp')
+                # Microseconds since Sierra Chart epoch (1899-12-30)
+                base_date = pd.Timestamp('1899-12-30 00:00:00')
+                ts = base_date + pd.Timedelta(microseconds=dt)
+                
+                # Validate timestamp is reasonable (1990-2100)
+                # More permissive range since some files may have older data
+                if ts.year < 1990 or ts.year > 2100:
+                    skipped += 1
+                    continue
             except Exception:
-                try:
-                    ts = pd.to_datetime(dt, unit='ms')
-                    if ts.year < 2000 or ts.year > 2100:
-                        raise ValueError('Out of bounds ms timestamp')
-                except Exception:
-                    try:
-                        ts = pd.to_datetime(dt, unit='ns')
-                        if ts.year < 2000 or ts.year > 2100:
-                            skipped += 1
-                            continue
-                    except Exception:
-                        skipped += 1
-                        continue
+                skipped += 1
+                continue
+            
             records.append([ts, o, h, l, c, ntrades, tvol, bvol, avol])
     df = pd.DataFrame(records, columns=columns)
     if skipped > 0:

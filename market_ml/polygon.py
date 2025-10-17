@@ -280,3 +280,5 @@ def get_market_status() -> Dict[str, Any]:
     except Exception as e:
         logger.error(f"Failed to get market status: {str(e)}")
         raise PolygonError(f"Market status check failed: {str(e)}") from e
+
+print(service.realtime_data['SPY'])  # Example for SPY
